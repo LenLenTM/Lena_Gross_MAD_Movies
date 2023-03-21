@@ -143,6 +143,7 @@ fun MovieRow(movie: Movie) {
                         contentScale = ContentScale.Crop
                     )
                 }
+
                 Icon(
                     Icons.Default.FavoriteBorder,
                     contentDescription = "",
