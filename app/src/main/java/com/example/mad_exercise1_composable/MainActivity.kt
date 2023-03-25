@@ -1,12 +1,11 @@
 package com.example.mad_exercise1_composable
 
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.VmPolicy
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mad_exercise1_composable.navigation.Navigation
 import com.example.mad_exercise1_composable.ui.theme.MAD_Exercise1_ComposableTheme
 
 

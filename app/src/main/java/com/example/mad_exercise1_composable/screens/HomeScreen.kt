@@ -1,6 +1,5 @@
 package com.example.mad_exercise1_composable.screens
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,20 +16,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.mad_exercise1_composable.Screens
+import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.models.getMovies
 
 @Composable
 fun MovieList(movies: List<Movie> = getMovies(), navController: NavHostController){
     Column() {
-        TopAppBar()
+        TopAppBar(({ navController.navigate(Screens.FavoriteScreen.route) }))
         LazyColumn{
             items(movies){movie -> MovieRow(movie = movie){movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)}
                 Modifier.padding(vertical = 10.dp)}
@@ -39,7 +36,7 @@ fun MovieList(movies: List<Movie> = getMovies(), navController: NavHostControlle
 }
 
 @Composable
-fun TopAppBar() {
+fun TopAppBar(onFavClick : () -> Unit) {
 
     var expanded by remember{ mutableStateOf(false) }
 
@@ -65,7 +62,8 @@ fun TopAppBar() {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .width(120.dp),
+                            .width(120.dp)
+                            .clickable { onFavClick() },
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Icon(
@@ -85,7 +83,6 @@ fun TopAppBar() {
                 }
             }
         },
-        elevation = -4.dp,
         backgroundColor = Color.Black
     )
 }
@@ -98,6 +95,7 @@ fun MovieRow(movie: Movie, onItemClick : (String) -> Unit) {
             .padding(5.dp)
             .clickable { onItemClick(movie.id) },
         shape = RoundedCornerShape(corner = CornerSize(10.dp)),
+        elevation = 5.dp
     ) {
         Column {
 
