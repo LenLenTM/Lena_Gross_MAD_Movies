@@ -6,12 +6,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.mad_exercise1_composable.screens.AddMovieScreen
 import com.example.mad_exercise1_composable.screens.DetailScreen
 import com.example.mad_exercise1_composable.screens.FavoriteScreen
 import com.example.mad_exercise1_composable.screens.MovieList
+import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun Navigation(navController: NavHostController){
+fun Navigation(navController: NavHostController, moviesViewModel: MoviesViewModel){
     NavHost(
         navController = navController,
         startDestination = Screens.HomeScreen.route
@@ -19,7 +21,7 @@ fun Navigation(navController: NavHostController){
         composable(
             route = Screens.HomeScreen.route
         ){
-            MovieList(navController = navController)
+            MovieList(navController = navController, moviesViewModel = moviesViewModel)
         }
         composable(
             route = Screens.DetailScreen.route + "/{movieId}",
@@ -28,12 +30,17 @@ fun Navigation(navController: NavHostController){
             )
         ){
             var movieId = it.arguments?.getString("movieId").toString()
-            DetailScreen(navController = navController, movieId = movieId)
+            DetailScreen(navController = navController, movieId = movieId, moviesViewModel = moviesViewModel)
         }
         composable(
             route = Screens.FavoriteScreen.route
         ){
-            FavoriteScreen(navController = navController)
+            FavoriteScreen(navController = navController, moviesViewModel = moviesViewModel)
+        }
+        composable(
+            route = Screens.AddMovieScreen.route
+        ){
+            AddMovieScreen(navController = navController)
         }
     }
 }

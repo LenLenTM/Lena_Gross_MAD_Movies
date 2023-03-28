@@ -1,5 +1,6 @@
 package com.example.mad_exercise1_composable.screens
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,25 +19,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.models.getMovies
+import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun MovieList(movies: List<Movie> = getMovies(), navController: NavHostController){
+fun MovieList(movies: List<Movie> = getMovies(), navController: NavHostController, moviesViewModel: MoviesViewModel){
+
     Column() {
-        TopAppBar(({ navController.navigate(Screens.FavoriteScreen.route) }))
+        TopAppBar(navController)
         LazyColumn{
-            items(movies){movie -> MovieRow(movie = movie){movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)}
+            items(movies){movie -> MovieRow(moviesViewModel = moviesViewModel, movie = movie){movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)}
                 Modifier.padding(vertical = 10.dp)}
         }
     }
 }
 
 @Composable
-fun TopAppBar(onFavClick : () -> Unit) {
+fun TopAppBar(navController: NavHostController) {
 
     var expanded by remember{ mutableStateOf(false) }
 
@@ -58,12 +62,11 @@ fun TopAppBar(onFavClick : () -> Unit) {
             }
             DropdownMenu(expanded = expanded,
                 onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(onClick = {}) {
+                DropdownMenuItem(onClick = {navController.navigate(Screens.FavoriteScreen.route)}) {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .width(120.dp)
-                            .clickable { onFavClick() },
+                            .width(120.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Icon(
@@ -81,6 +84,28 @@ fun TopAppBar(onFavClick : () -> Unit) {
                         )
                     }
                 }
+                DropdownMenuItem(onClick = {navController.navigate(Screens.AddMovieScreen.route)}) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .width(120.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "",
+                            Modifier
+                                .padding(vertical = 6.dp),
+                            tint = Color.DarkGray
+                        )
+                        Text(
+                            text = "AddMovie",
+                            Modifier
+                                .padding(horizontal = 2.0.dp, vertical = 5.0.dp),
+                            fontSize = 18.sp
+                        )
+                    }
+                }
             }
         },
         backgroundColor = Color.Black
@@ -88,7 +113,8 @@ fun TopAppBar(onFavClick : () -> Unit) {
 }
 
 @Composable
-fun MovieRow(movie: Movie, onItemClick : (String) -> Unit) {
+fun MovieRow(moviesViewModel: MoviesViewModel, movie: Movie, onItemClick : (String) -> Unit) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,12 +123,15 @@ fun MovieRow(movie: Movie, onItemClick : (String) -> Unit) {
         shape = RoundedCornerShape(corner = CornerSize(10.dp)),
         elevation = 5.dp
     ) {
+        var details by remember {
+            mutableStateOf(true)
+        }
+
+        var isFav by remember {
+            mutableStateOf(moviesViewModel.getFavorite(movie.id))
+        }
+
         Column {
-
-            var details by remember {
-                mutableStateOf(true)
-            }
-
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -117,15 +146,23 @@ fun MovieRow(movie: Movie, onItemClick : (String) -> Unit) {
                         contentScale = ContentScale.Crop
                     )
                 }
-
-                Icon(
-                    Icons.Default.FavoriteBorder,
-                    contentDescription = "",
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(vertical = 7.dp, horizontal = 7.dp),
-                    tint = Color.White
-                )
+                IconButton(onClick = {
+                    moviesViewModel.toggleFavorite(movie.id)
+                    isFav = !isFav
+                }) {
+                    Icon(
+                        imageVector = if (isFav) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = "",
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(vertical = 7.dp, horizontal = 7.dp),
+                        tint = Color.White
+                    )
+                }
             }
             Row(
                 Modifier
@@ -140,7 +177,6 @@ fun MovieRow(movie: Movie, onItemClick : (String) -> Unit) {
                         .padding(horizontal = 6.0.dp, vertical = 5.0.dp),
                     fontSize = 20.sp
                 )
-
                 IconButton(
                     onClick = {
                         details = !details

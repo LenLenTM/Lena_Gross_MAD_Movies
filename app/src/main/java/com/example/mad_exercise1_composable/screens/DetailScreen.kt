@@ -17,9 +17,10 @@ import coil.compose.AsyncImage
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.models.getMovies
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
+import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun DetailScreen(navController: NavHostController, movieId: String){
+fun DetailScreen(navController: NavHostController, movieId: String, moviesViewModel: MoviesViewModel){
 
     val movies: List<Movie>  = getMovies().filter { it.id == movieId }
     val movie: Movie = movies[0]
@@ -28,7 +29,8 @@ fun DetailScreen(navController: NavHostController, movieId: String){
         SimpleAppBar(title = movie.title, navController = navController)
         MovieRow(
             movie = movie,
-            onItemClick = {}
+            onItemClick = {},
+            moviesViewModel = moviesViewModel
         )
         Spacer(
             modifier = Modifier.size(20.dp))
