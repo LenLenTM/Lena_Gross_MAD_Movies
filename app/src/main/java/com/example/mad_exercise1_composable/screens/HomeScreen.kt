@@ -1,6 +1,5 @@
 package com.example.mad_exercise1_composable.screens
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,50 +18,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.models.getMovies
+import com.example.mad_exercise1_composable.widgets.HomeAppBar
+import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun MovieList(movies: List<Movie> = getMovies(), navController: NavHostController, moviesViewModel: MoviesViewModel){
-
+fun HomeScreen(navController: NavController, moviesViewModel: MoviesViewModel){
     Column() {
-        TopAppBar(navController)
-        LazyColumn{
-            items(movies){movie -> MovieRow(moviesViewModel = moviesViewModel, movie = movie){movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)}
-                Modifier.padding(vertical = 10.dp)}
-        }
-    }
-}
-
-@Composable
-fun TopAppBar(navController: NavHostController) {
-
-    var expanded by remember{ mutableStateOf(false) }
-
-    TopAppBar(
-        title = {
-            Text(text = "Movies",
-                color = Color.White
-            )
-        },
-        actions = {
-            IconButton(onClick = {
-                expanded = true
-            }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "DropDown",
-                    tint = Color.White
-                )
-            }
-            DropdownMenu(expanded = expanded,
-                onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(onClick = {navController.navigate(Screens.FavoriteScreen.route)}) {
+        HomeAppBar(
+            title = "Home",
+            dropDownContent = {
+                DropdownMenuItem(onClick = { navController.navigate(Screens.FavoriteScreen.route) }) {
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -84,7 +56,8 @@ fun TopAppBar(navController: NavHostController) {
                         )
                     }
                 }
-                DropdownMenuItem(onClick = {navController.navigate(Screens.AddMovieScreen.route)}) {
+                DropdownMenuItem(onClick =
+                { navController.navigate(Screens.AddMovieScreen.route) }) {
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -107,127 +80,15 @@ fun TopAppBar(navController: NavHostController) {
                     }
                 }
             }
-        },
-        backgroundColor = Color.Black
-    )
-}
-
-@Composable
-fun MovieRow(moviesViewModel: MoviesViewModel, movie: Movie, onItemClick : (String) -> Unit) {
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp)
-            .clickable { onItemClick(movie.id) },
-        shape = RoundedCornerShape(corner = CornerSize(10.dp)),
-        elevation = 5.dp
-    ) {
-        var details by remember {
-            mutableStateOf(true)
-        }
-
-        var isFav by remember {
-            mutableStateOf(moviesViewModel.getFavorite(movie.id))
-        }
-
-        Column {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .background(Color.Cyan),
-                Alignment.TopEnd
-            ) {
-                Box {
-                    AsyncImage(
-                        model = movie.images[0],
-                        contentDescription = "Picture from the move " + movie.title,
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                IconButton(onClick = {
-                    moviesViewModel.toggleFavorite(movie.id)
-                    isFav = !isFav
-                }) {
-                    Icon(
-                        imageVector = if (isFav) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = "",
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(vertical = 7.dp, horizontal = 7.dp),
-                        tint = Color.White
-                    )
-                }
-            }
-            Row(
-                Modifier
-                    .height(40.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Text(
-                    text = movie.title,
-                    Modifier
-                        .padding(horizontal = 6.0.dp, vertical = 5.0.dp),
-                    fontSize = 20.sp
-                )
-                IconButton(
-                    onClick = {
-                        details = !details
-                    }
-                ) {
-                    Icon(
-                        imageVector = if (details) {
-                            Icons.Default.KeyboardArrowUp
-                        } else {
-                            Icons.Default.KeyboardArrowDown
-                        },
-                        ""
-                    )
-                }
-            }
-            AnimatedVisibility(visible = !details) {
-                Column {
-                    Text(
-                        text = movie.title + "  " + movie.year + " (" + movie.genre + ")",
-                        Modifier
-                            .padding(horizontal = 6.0.dp, vertical = 5.0.dp)
-                    )
-
-                    Text(
-                        text = movie.director + "   Rating: " + movie.rating,
-                        Modifier
-                            .padding(horizontal = 6.0.dp, vertical = 5.0.dp),
-                        fontSize = 12.sp
-                    )
-
-                    Text(
-                        text = movie.actors,
-                        Modifier
-                            .padding(horizontal = 6.0.dp, vertical = 5.0.dp),
-                        fontSize = 12.sp
-                    )
-
-                    Divider(
-                        Modifier
-                            .padding(horizontal = 6.dp)
-                    )
-
-                    Text(
-                        text = movie.plot + "\n",
-                        Modifier
-                            .padding(horizontal = 6.0.dp, vertical = 7.0.dp),
-                        fontSize = 12.sp
-                    )
-                }
+        )
+        LazyColumn {
+            items(moviesViewModel.movieList) { movie ->
+                MovieRow(
+                    movie = movie,
+                    onItemClick = { movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId) },
+                    onFavClick = { moviesViewModel.toggleFavorite(it.id) })
+                Modifier.padding(vertical = 10.dp)
             }
         }
     }
 }
-

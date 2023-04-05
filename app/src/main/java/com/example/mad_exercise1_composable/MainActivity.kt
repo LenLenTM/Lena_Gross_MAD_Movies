@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mad_exercise1_composable.navigation.Navigation
@@ -13,19 +14,13 @@ import com.example.movieappmad23.viewModels.MoviesViewModel
 
 
 class MainActivity : ComponentActivity() {
-
-    lateinit var navController : NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel: MoviesViewModel by viewModels()
-        viewModel.movieList
-
         setContent {
             MAD_Exercise1_ComposableTheme {
-                
-                navController = rememberNavController()
-                Navigation(navController = navController, moviesViewModel = viewModel);
+
+                Navigation();
 
             }
         }

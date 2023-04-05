@@ -8,29 +8,35 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.models.getMovies
+import com.example.mad_exercise1_composable.navigation.Screens
+import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
 import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun DetailScreen(navController: NavHostController, movieId: String, moviesViewModel: MoviesViewModel){
+fun DetailScreen(navController: NavController, movieId: String, moviesViewModel: MoviesViewModel){
 
-    val movies: List<Movie>  = getMovies().filter { it.id == movieId }
+    val movies: List<Movie>  = moviesViewModel.movieList.filter { it.id == movieId }
     val movie: Movie = movies[0]
 
     Column {
-        SimpleAppBar(title = movie.title, navController = navController)
+        SimpleAppBar(arrowBackClicked = {navController.navigateUp()}){
+            Text(text = movie.title, color = Color.White)
+        }
         MovieRow(
             movie = movie,
-            onItemClick = {},
-            moviesViewModel = moviesViewModel
+            onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)},
+            onFavClick = {moviesViewModel.toggleFavorite(it.id)}
         )
         Spacer(
             modifier = Modifier.size(20.dp))

@@ -10,34 +10,39 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mad_exercise1_composable.R
 import com.example.mad_exercise1_composable.models.Genre
 import com.example.mad_exercise1_composable.models.ListItemSelectable
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
+import com.example.movieappmad23.viewModels.MoviesViewModel
 
 @Composable
-fun AddMovieScreen(navController: NavHostController){
+fun AddMovieScreen(navController: NavController, moviesViewModel : MoviesViewModel){
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            SimpleAppBar(title = "Add Movie", navController = navController)
+            SimpleAppBar(arrowBackClicked = {navController.popBackStack()}){
+                Text(text = "Add new movie")
+            }
         },
     ) { padding ->
-        MainContent(Modifier.padding(padding))
+        MainContent(Modifier.padding(padding), moviesViewModel)
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun MainContent(modifier: Modifier = Modifier, moviesViewModel : MoviesViewModel) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -54,6 +59,10 @@ fun MainContent(modifier: Modifier = Modifier) {
 
             var title by remember {
                 mutableStateOf("")
+            }
+
+            var titleValid by remember {
+                mutableStateOf(true)
             }
 
             var year by remember {
@@ -93,14 +102,29 @@ fun MainContent(modifier: Modifier = Modifier) {
                 mutableStateOf(true)
             }
 
+
             OutlinedTextField(
                 value = title,
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                onValueChange = { title = it },
+                onValueChange = { title = it
+                    titleValid = moviesViewModel.validateTitle(title)},
                 label = { Text(text = stringResource(R.string.enter_movie_title)) },
-                isError = false
+                isError = false,
+                colors = if (!titleValid) TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Red,
+                    unfocusedBorderColor = Color.Red
+                ) else TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.DarkGray,
+                    unfocusedBorderColor = Color.DarkGray
+                )
             )
+            if (!titleValid){
+                Text(text = "Title is required",
+                    color = Color.Red,
+                    fontSize = 10.sp
+                )
+            }
 
             OutlinedTextField(
                 value = year,
