@@ -1,6 +1,7 @@
 package com.example.mad_exercise1_composable.widgets
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,13 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.mad_exercise1_composable.R
 import com.example.mad_exercise1_composable.models.Movie
 
 @Composable
-fun MovieRow(movie: Movie, onItemClick : (String) -> Unit, onFavClick: (Movie) -> Unit) {
+fun MovieRow(movie: Movie, onItemClick : (String) -> Unit, onFavClick: (movie: Movie) -> Unit = {}) {
 
     Card(
         modifier = Modifier
@@ -41,12 +44,19 @@ fun MovieRow(movie: Movie, onItemClick : (String) -> Unit, onFavClick: (Movie) -
                     .background(Color.Cyan),
                 contentAlignment = Alignment.TopEnd
             ) {
-                MovieImage(imageUrl = movie.images[0])
+                if (movie.images[0] == "default")
+                    Box {
+                        Image(
+                            painter = painterResource(id = R.drawable.image),
+                            contentDescription = "Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                else MovieImage(imageUrl = movie.images[0])
                 Favorite(onFavClick, movie)
             }
-
             MovieDetails(movie = movie)
-
         }
     }
 }
@@ -65,16 +75,12 @@ fun MovieImage(imageUrl: String){
 @Composable
 fun Favorite(onFavClick: (Movie) -> Unit, movie: Movie){
 
-    var isFav by remember {
-        mutableStateOf(movie.isFavorite)
-    }
-
     IconButton(onClick = {
         onFavClick(movie)
-        isFav = !isFav
+        //movie.isFavorite != movie.isFavorite
     }) {
         Icon(
-            imageVector = if (isFav) {
+            imageVector = if (movie.isFavorite) {
                 Icons.Default.Favorite
             } else {
                 Icons.Default.FavoriteBorder
@@ -125,7 +131,7 @@ fun MovieDetails(movie: Movie){
     AnimatedVisibility(visible = details) {
         Column {
             Text(
-                text = movie.title + "  " + movie.year + " (" + movie.genre + ")",
+                text = movie.title + "  " + movie.year + " " + movie.genre + "",
                 Modifier
                     .padding(horizontal = 6.0.dp, vertical = 5.0.dp)
             )

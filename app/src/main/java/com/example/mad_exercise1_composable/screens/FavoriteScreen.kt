@@ -1,5 +1,6 @@
 package com.example.mad_exercise1_composable.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,19 +23,18 @@ import com.example.movieappmad23.viewModels.MoviesViewModel
 @Composable
 fun FavoriteScreen(navController: NavController, moviesViewModel: MoviesViewModel){
 
-    val movieList = moviesViewModel.getFavoriteMovieList()
+    val favMovies : List<Movie> = moviesViewModel.getFavoriteMovieList();
 
     Column() {
         SimpleAppBar(arrowBackClicked = { navController.popBackStack() }) {
             Text(text = "My Favorite Movies", color = Color.White)
         }
         LazyColumn {
-            items(movieList){ movie ->
+            items(favMovies){ movie ->
                 MovieRow(
                     movie = movie,
                     onItemClick = { movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId) },
-                    onFavClick = {moviesViewModel.toggleFavorite(it.id)}
-                )
+                    onFavClick = { moviesViewModel.toggleFavorite(it) })
             }
         }
     }

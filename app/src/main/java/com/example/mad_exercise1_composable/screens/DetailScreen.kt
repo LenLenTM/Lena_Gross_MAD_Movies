@@ -36,7 +36,7 @@ fun DetailScreen(navController: NavController, movieId: String, moviesViewModel:
         MovieRow(
             movie = movie,
             onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)},
-            onFavClick = {moviesViewModel.toggleFavorite(it.id)}
+            onFavClick = {moviesViewModel.toggleFavorite(it)}
         )
         Spacer(
             modifier = Modifier.size(20.dp))

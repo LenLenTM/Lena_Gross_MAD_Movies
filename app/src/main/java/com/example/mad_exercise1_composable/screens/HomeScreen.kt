@@ -86,7 +86,7 @@ fun HomeScreen(navController: NavController, moviesViewModel: MoviesViewModel){
                 MovieRow(
                     movie = movie,
                     onItemClick = { movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId) },
-                    onFavClick = { moviesViewModel.toggleFavorite(it.id) })
+                    onFavClick = { moviesViewModel.toggleFavorite(it) })
                 Modifier.padding(vertical = 10.dp)
             }
         }

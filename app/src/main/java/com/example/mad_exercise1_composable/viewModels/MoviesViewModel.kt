@@ -15,38 +15,28 @@ class MoviesViewModel : ViewModel() {
         return _movieList.filter { it.isFavorite }
     }
 
-    fun toggleFavorite(movieId: String){
-        var position: Int = 0;
-        _movieList.forEachIndexed{index, it -> if(it.id == movieId){position = index} }
-
-        _movieList[position].isFavorite = !_movieList[position].isFavorite
+    fun toggleFavorite(movie: Movie){
+        _movieList.find{it.id == movie.id}?.let{movie.isFavorite = !movie.isFavorite}
     }
 
-    fun validateTitle(title: String): Boolean{
-        return title.isNotEmpty()
+    fun addMovie(movie : Movie){
+        _movieList.add(movie)
     }
 
-    fun validateYear(year: String): Boolean{
-        return year.isNotEmpty()
-    }
+    fun validateMovie(movie: Movie): List<Boolean>{
+        var errorMessages = mutableListOf(false, false, false, false, false, false, false)
 
-    fun validateGenres(){
+        when {movie.title.isEmpty() -> errorMessages[0] = true}
+        when {movie.year.isEmpty() -> errorMessages[1] = true}
+        when {movie.genre.isEmpty() -> errorMessages[2] = true}
+        when {movie.director.isEmpty() -> errorMessages[3] = true}
+        when {movie.actors.isEmpty() -> errorMessages[4] = true}
+        when {movie.plot.isEmpty() -> errorMessages[5] = true}
+        when {movie.rating.toString().isEmpty() -> errorMessages[6] = true}
+        when {movie.rating == 0.0f -> errorMessages[6] = true}
 
-    }
+        Log.i("EM", errorMessages.toString())
 
-    fun validateDirector(director: String): Boolean{
-        return director.isNotEmpty()
-    }
-
-    fun validateActors(actors: String): Boolean{
-        return actors.isNotEmpty()
-    }
-
-    fun validatePlot(plot: String): Boolean{
-        return plot.isNotEmpty()
-    }
-
-    fun validateRating(rating: Float): Boolean{
-        return rating.toString().isNotEmpty()
+        return errorMessages
     }
 }

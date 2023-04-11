@@ -1,16 +1,23 @@
 package com.example.mad_exercise1_composable.models
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 data class Movie(
     val id: String,
-    val title: String,
-    val year: String,
-    val genre: List<Genre>,
-    val director: String,
-    val actors: String,
-    val plot: String,
+    var title: String,
+    var year: String,
+    var genre: List<Genre>,
+    var director: String,
+    var actors: String,
+    var plot: String,
     val images: List<String>,
-    val rating: Float = 0f,
-    var isFavorite: Boolean = false)
+    var rating: Float = 0f,
+    var initialIsFavorite: Boolean = false
+){
+    var isFavorite by mutableStateOf(initialIsFavorite)
+}
 
 fun getMovies(): List<Movie> {
     return listOf(
