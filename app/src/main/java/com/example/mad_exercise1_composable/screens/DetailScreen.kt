@@ -8,8 +8,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,17 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.mad_exercise1_composable.models.Movie
-import com.example.mad_exercise1_composable.models.getMovies
 import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.utils.InjectorUtils
 import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
-import com.example.movieappmad23.viewModels.AddMovieViewModel
-import com.example.movieappmad23.viewModels.DetailsViewModel
-import com.example.movieappmad23.viewModels.MoviesViewModel
+import com.example.mad_exercise1_composable.viewModels.DetailsViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")

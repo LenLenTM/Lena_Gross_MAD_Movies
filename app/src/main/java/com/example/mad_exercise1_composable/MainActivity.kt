@@ -4,15 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.mad_exercise1_composable.data.MovieDatabase
 import com.example.mad_exercise1_composable.navigation.Navigation
 import com.example.mad_exercise1_composable.ui.theme.MAD_Exercise1_ComposableTheme
-import com.example.movieappmad23.viewModels.MoviesViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MAD_Exercise1_ComposableTheme {
 
-                Navigation();
+                Navigation()
 
             }
         }

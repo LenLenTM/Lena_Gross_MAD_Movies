@@ -7,8 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.mad_exercise1_composable.utils.Converters
 import com.example.mad_exercise1_composable.models.Movie
-import com.example.mad_exercise1_composable.models.getMovies
-import java.io.File
 
 @Database(
     entities = [Movie::class],

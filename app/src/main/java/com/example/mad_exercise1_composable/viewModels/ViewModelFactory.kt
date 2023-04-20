@@ -3,10 +3,6 @@ package com.example.mad_exercise1_composable.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mad_exercise1_composable.reposirories.MovieRepository
-import com.example.movieappmad23.viewModels.AddMovieViewModel
-import com.example.movieappmad23.viewModels.DetailsViewModel
-import com.example.movieappmad23.viewModels.FavoritesViewModel
-import com.example.movieappmad23.viewModels.MoviesViewModel
 
 class ViewModelFactory(private val repository: MovieRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

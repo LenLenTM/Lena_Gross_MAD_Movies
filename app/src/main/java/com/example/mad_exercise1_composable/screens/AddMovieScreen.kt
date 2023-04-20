@@ -25,9 +25,7 @@ import com.example.mad_exercise1_composable.models.ListItemSelectable
 import com.example.mad_exercise1_composable.models.Movie
 import com.example.mad_exercise1_composable.utils.InjectorUtils
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
-import com.example.movieappmad23.viewModels.AddMovieViewModel
-import com.example.movieappmad23.viewModels.FavoritesViewModel
-import com.example.movieappmad23.viewModels.MoviesViewModel
+import com.example.mad_exercise1_composable.viewModels.AddMovieViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -292,7 +290,7 @@ fun MainContent(modifier: Modifier = Modifier,
 }
 
 fun genreList(genreItems : List<ListItemSelectable>): List<Genre>{
-    var genreList = mutableListOf<Genre>()
+    val genreList = mutableListOf<Genre>()
 
     genreItems.forEach(){
         if (it.isSelected) genreList.add(enumValueOf(it.title))
@@ -309,17 +307,4 @@ fun ErrorText(isError : Boolean, text : String){
             fontSize = 10.sp
         )
     }
-}
-
-fun checkAddable(titleError: Boolean,
-                 yearError: Boolean,
-                 genreError: Boolean,
-                 directorError: Boolean,
-                 actorError: Boolean,
-                 plotError: Boolean,
-                 ratingError: Boolean): Boolean{
-    if (!titleError && !yearError && !genreError && !directorError && !actorError && !plotError && !ratingError){
-        return true
-    }
-    return false
 }
