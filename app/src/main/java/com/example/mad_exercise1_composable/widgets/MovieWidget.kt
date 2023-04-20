@@ -26,7 +26,7 @@ import com.example.mad_exercise1_composable.R
 import com.example.mad_exercise1_composable.models.Movie
 
 @Composable
-fun MovieRow(movie: Movie, onItemClick : (String) -> Unit, onFavClick: (movie: Movie) -> Unit = {}) {
+fun MovieRow(movie: Movie, onItemClick : (Int) -> Unit, onFavClick: (movie: Movie) -> Unit = {}) {
 
     Card(
         modifier = Modifier
@@ -77,7 +77,6 @@ fun Favorite(onFavClick: (Movie) -> Unit, movie: Movie){
 
     IconButton(onClick = {
         onFavClick(movie)
-        //movie.isFavorite != movie.isFavorite
     }) {
         Icon(
             imageVector = if (movie.isFavorite) {

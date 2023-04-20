@@ -11,22 +11,34 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.mad_exercise1_composable.R
 import com.example.mad_exercise1_composable.models.Genre
 import com.example.mad_exercise1_composable.models.ListItemSelectable
 import com.example.mad_exercise1_composable.models.Movie
+import com.example.mad_exercise1_composable.utils.InjectorUtils
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
+import com.example.movieappmad23.viewModels.AddMovieViewModel
+import com.example.movieappmad23.viewModels.FavoritesViewModel
 import com.example.movieappmad23.viewModels.MoviesViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun AddMovieScreen(navController: NavController, moviesViewModel : MoviesViewModel){
+fun AddMovieScreen(navController: NavController){
+
+    val viewModel: AddMovieViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(
+        LocalContext.current))
+
     val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -37,9 +49,9 @@ fun AddMovieScreen(navController: NavController, moviesViewModel : MoviesViewMod
         },
     ) { padding ->
         MainContent(modifier = Modifier.padding(padding),
-                    addMovie = {addMovie -> moviesViewModel.addMovie(addMovie) },
+                    addMovie = {coroutineScope.launch{ viewModel.addMovie(it) }},
                     navigateBack = {navController.popBackStack()},
-                    validateMovie = {validateMovie -> moviesViewModel.validateMovie(validateMovie)})
+                    validateMovie = {validateMovie -> viewModel.validateMovie(validateMovie)})
     }
 }
 
@@ -257,7 +269,7 @@ fun MainContent(modifier: Modifier = Modifier,
             ErrorText(isError = ratingError , text = "Rating is required and must be a number")
 
             movie = Movie(
-                id = "2212DDw2",
+                //id = 1,
                 title = title,
                 year = year,
                 genre = genreList(genreItems),
@@ -266,7 +278,7 @@ fun MainContent(modifier: Modifier = Modifier,
                 plot = plot,
                 images = listOf<String>("default"),
                 rating = if (rating.toFloatOrNull() != null) rating.toFloat() else 0.0f,
-                initialIsFavorite = false
+                isFavorite = false
             )
 
             Button(

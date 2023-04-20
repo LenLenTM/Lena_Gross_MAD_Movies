@@ -3,9 +3,13 @@ package com.example.mad_exercise1_composable.models
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class Movie(
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     var title: String,
     var year: String,
     var genre: List<Genre>,
@@ -14,15 +18,14 @@ data class Movie(
     var plot: String,
     val images: List<String>,
     var rating: Float = 0f,
-    var initialIsFavorite: Boolean = false
+    var isFavorite: Boolean = false
 ){
-    var isFavorite by mutableStateOf(initialIsFavorite)
+    //var isFavorite by mutableStateOf(initialIsFavorite)
 }
 
 fun getMovies(): List<Movie> {
     return listOf(
-        Movie(id = "tt0499549",
-            title = "Avatar",
+        Movie(title = "Avatar",
             year = "2009",
             genre = listOf(Genre.ACTION, Genre.ADVENTURE, Genre.FANTASY),
             director = "James Cameron",
@@ -35,8 +38,7 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTYxMDg1Nzk1MV5BMl5BanBnXkFtZTcwMDk0MTUzNA@@._V1_SX1500_CR0,0,1500,999_AL_.jpg"),
             rating = 7.9f),
 
-        Movie(id = "tt0416449",
-            title = "300",
+        Movie(title = "300",
             year = "2006",
             genre = listOf(Genre.ACTION, Genre.DRAMA, Genre.FANTASY),
             director = "Zack Snyder",
@@ -48,8 +50,7 @@ fun getMovies(): List<Movie> {
             ),
             rating = 7.7f),
 
-        Movie(id = "tt0848228",
-            title = "The Avengers",
+        Movie(title = "The Avengers",
             year = "2012",
             genre = listOf(Genre.ACTION, Genre.SCIFI, Genre.THRILLER),
             director = "Joss Whedon",
@@ -62,8 +63,7 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc3MzQ3NjA5N15BMl5BanBnXkFtZTcwMzY5OTY3Nw@@._V1_SX1777_CR0,0,1777,999_AL_.jpg"),
             rating = 8.1f),
 
-        Movie(id = "tt0993846",
-            title = "The Wolf of Wall Street",
+        Movie(title = "The Wolf of Wall Street",
             year = "2013",
             genre = listOf(Genre.BIOGRAPHY, Genre.COMEDY, Genre.COMEDY),
             director = "Martin Scorsese",
@@ -76,8 +76,7 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTgzMTg4MDI0Ml5BMl5BanBnXkFtZTgwOTY0MzQ4MDE@._V1_SY1000_CR0,0,1553,1000_AL_.jpg"),
             rating = 8.2f),
 
-        Movie(id = "tt0816692",
-            title = "Interstellar",
+        Movie(title = "Interstellar",
             year = "2014",
             genre = listOf(Genre.ADVENTURE, Genre.DRAMA, Genre.SCIFI),
             director = "Christopher Nolan",
@@ -89,8 +88,8 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMzE3MTM0MTc3Ml5BMl5BanBnXkFtZTgwMDIyODgxMzE@._V1_SX1500_CR0,0,1500,999_AL_.jpg",
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BNjYzNjE2NDk3N15BMl5BanBnXkFtZTgwNzEyODgxMzE@._V1_SX1500_CR0,0,1500,999_AL_.jpg"),
             rating = 8.6f),
-        Movie(id = "tt0944947",
-            title = "Game of Thrones",
+
+        Movie(title = "Game of Thrones",
             year = "2011 - 2018",
             genre = listOf(Genre.ADVENTURE, Genre.DRAMA, Genre.FANTASY),
             director = "N/A",
@@ -104,8 +103,7 @@ fun getMovies(): List<Movie> {
             rating = 9.5f),
 
 
-        Movie(id = "tt2306299",
-            title = "Vikings",
+        Movie(title = "Vikings",
             year = "2013–2020",
             genre = listOf(Genre.ACTION, Genre.DRAMA, Genre.HISTORY),
             director = "N/A",
@@ -118,8 +116,7 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTcxOTQ3NTA5N15BMl5BanBnXkFtZTgwMzExMDUxODE@._V1_SY1000_SX1500_AL_.jpg"),
             rating = 9.5f),
 
-        Movie(id = "tt0903747",
-            title = "Breaking Bad",
+        Movie(title = "Breaking Bad",
             year = "2008–2013",
             genre = listOf(Genre.CRIME, Genre.DRAMA, Genre.THRILLER),
             director = "N/A",
@@ -132,8 +129,7 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMjA5MTE3MTgwMF5BMl5BanBnXkFtZTgwOTQxMjUzMDE@._V1_SX1500_CR0,0,1500,999_AL_.jpg"),
             rating = 9.5f),
 
-        Movie(id = "tt2707408",
-            title = "Narcos",
+        Movie(title = "Narcos",
             year = "2015-",
             genre = listOf(Genre.BIOGRAPHY, Genre.CRIME, Genre.DRAMA),
             director = "N/A",

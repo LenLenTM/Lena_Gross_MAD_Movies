@@ -10,5 +10,6 @@ enum class Genre {
     DRAMA,
     HISTORY,
     SCIFI,
-    THRILLER
+    THRILLER,
+    NONE
 }
