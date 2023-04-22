@@ -30,7 +30,6 @@ fun HomeScreen(navController: NavController){
     val coroutineScope = rememberCoroutineScope()
     val movieListState by viewModel.movieList.collectAsState()
 
-
     Column() {
         HomeAppBar(
             title = "Home",
@@ -86,9 +85,8 @@ fun HomeScreen(navController: NavController){
             items(movieListState) { movie ->
                 MovieRow(
                     movie = movie,
-                    onItemClick = { movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId) },
-                    onFavClick = { Log.i("HomeScreen", "here")
-                        coroutineScope.launch { viewModel.toggleFavorite(it) }})
+                    onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/${movieId}") },
+                    onFavClick = { coroutineScope.launch { viewModel.toggleFavorite(it) }})
                 Modifier.padding(vertical = 10.dp)
             }
         }

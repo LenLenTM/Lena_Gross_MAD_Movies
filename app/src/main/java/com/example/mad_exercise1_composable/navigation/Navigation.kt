@@ -1,5 +1,6 @@
 package com.example.mad_exercise1_composable.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
@@ -30,8 +31,9 @@ fun Navigation(){
                 navArgument("movieId"){type = NavType.StringType },
             )
         ){
-            val movieId = it.arguments!!.getInt("movieId")
-            DetailScreen(navController = navController, movieId = movieId)
+            var movieId = it.arguments!!.getString("movieId")?.toInt()
+            //movieId?.let { movieId = it.toInt() }
+            DetailScreen(navController = navController, movieId = movieId!!)
         }
         composable(
             route = Screens.FavoriteScreen.route

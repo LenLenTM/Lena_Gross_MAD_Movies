@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,19 +33,19 @@ import kotlinx.coroutines.launch
 fun DetailScreen(navController: NavController, movieId: Int){
 
     val viewModel: DetailsViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(
-        LocalContext.current))
+        LocalContext.current)
+    )
 
     val coroutineScope = rememberCoroutineScope()
-    val movie = viewModel.getMovieByID(movieId)
-
-    //coroutineScope.launch { movie = viewModel.getMovieByID(movieId). }
+    viewModel.getMovieByID(movieId)
+    val movie by viewModel.movieList.collectAsState()
 
     Column {
         SimpleAppBar(arrowBackClicked = {navController.navigateUp()}){
-            Text(text = movie.title, color = Color.White)
+            Text(text = movie[0].title, color = Color.White)
         }
         MovieRow(
-            movie = movie,
+            movie = movie[0],
             onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)},
             onFavClick = {coroutineScope.launch{ viewModel.toggleFavorite(it)}}
         )
@@ -62,7 +64,7 @@ fun DetailScreen(navController: NavController, movieId: Int){
             modifier = Modifier.size(20.dp))
 
         LazyRow{
-            items(movie.images){image -> MovieImages(url = image)}
+            items(movie[0].images){ image -> MovieImages(url = image)}
         }
     }
 }

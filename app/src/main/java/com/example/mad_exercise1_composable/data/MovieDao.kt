@@ -25,7 +25,7 @@ interface MovieDao {
     fun readFavorites(): Flow<List<Movie>>
 
     @Query("Select * from movie where id=:id")
-    fun getMovieByID(id: Int): Flow<Movie>
+    fun getMovieByID(id: Int): Flow<List<Movie>>
 
     @Query("Delete from movie")
     suspend fun deleteAll()

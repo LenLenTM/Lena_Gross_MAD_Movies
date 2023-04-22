@@ -9,8 +9,7 @@ import kotlinx.coroutines.launch
 
 class MoviesViewModel(private val repository: MovieRepository) : ViewModel() {
     private val _movieList = MutableStateFlow(listOf<Movie>())
-    val movieList : StateFlow<List<Movie>>
-        get() = _movieList
+    val movieList : StateFlow<List<Movie>> = _movieList.asStateFlow()
 
     init {
         viewModelScope.launch {

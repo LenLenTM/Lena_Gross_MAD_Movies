@@ -1,5 +1,6 @@
 package com.example.mad_exercise1_composable.widgets
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
