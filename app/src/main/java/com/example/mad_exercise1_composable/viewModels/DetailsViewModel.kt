@@ -17,7 +17,7 @@ class DetailsViewModel(private val repository: MovieRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            repository.getMovieByID(movieID).collect{movieList ->
+            repository.getAllMovies().collect{movieList ->
                 _movieList.value = movieList
             }
         }
