@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class Movie(
+data class Movie(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var title: String,
@@ -18,6 +18,10 @@ class Movie(
     var isFavorite: Boolean = false
 ){
     //var isFavorite by mutableStateOf(initialIsFavorite)
+
+    override fun equals(other: Any?):Boolean {
+        return super.equals(other)
+    }
 }
 
 fun getMovies(): List<Movie> {

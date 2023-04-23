@@ -8,10 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,39 +27,37 @@ import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
 import com.example.mad_exercise1_composable.viewModels.DetailsViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectIndexed
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import okhttp3.internal.wait
 import java.lang.Thread.sleep
 import kotlin.coroutines.CoroutineContext
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun DetailScreen(navController: NavController, movieId: Int){
 
-    Log.i("DetailScreen", movieId.toString())
     val viewModel: DetailsViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(
         LocalContext.current)
     )
-
     val coroutineScope = rememberCoroutineScope()
 
-    //viewModel.getMovieByID(movieId)
+    var movie by remember {
+        mutableStateOf(getMovies()[0])
+    }
 
-    val movie by viewModel.movieList.collectAsState()
-
-    //Thread.sleep(2500)
+    LaunchedEffect(key1 = true){
+        movie = viewModel.getMovieByID(movieId)
+    }
 
     Column {
         SimpleAppBar(arrowBackClicked = {navController.navigateUp()}){
-            Text(text = movie[0].title, color = Color.White)
+            Text(text = movie.title, color = Color.White)
         }
         MovieRow(
-            movie = movie[0],
+            movie = movie,
             onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/" + movieId)},
-            onFavClick = {coroutineScope.launch{ viewModel.toggleFavorite(it)}}
+            onFavClick = {
+                coroutineScope.launch { viewModel.toggleFavorite(movie)
+                                            movie = viewModel.getMovieByID(movieId)}}
         )
         Spacer(
             modifier = Modifier.size(20.dp))
@@ -79,7 +74,7 @@ fun DetailScreen(navController: NavController, movieId: Int){
             modifier = Modifier.size(20.dp))
 
         LazyRow{
-            items(movie[0].images){ image -> MovieImages(url = image)}
+            items(movie.images){ image -> MovieImages(url = image)}
         }
     }
 }

@@ -20,7 +20,7 @@ class MoviesViewModel(private val repository: MovieRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            addMovies()
+            //addMovies()
             repository.getAllMovies()
                 .collect{movieList -> _movieList.value = movieList
             }
