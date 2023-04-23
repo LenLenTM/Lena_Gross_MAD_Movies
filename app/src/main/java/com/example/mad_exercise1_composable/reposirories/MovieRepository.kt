@@ -2,6 +2,7 @@ package com.example.mad_exercise1_composable.reposirories
 
 import com.example.mad_exercise1_composable.data.MovieDao
 import com.example.mad_exercise1_composable.models.Movie
+import kotlinx.coroutines.flow.first
 
 class MovieRepository(private val movieDao: MovieDao) {
 

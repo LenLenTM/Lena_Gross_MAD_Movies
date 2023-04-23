@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.utils.InjectorUtils
+import com.example.mad_exercise1_composable.viewModels.DetailsViewModel
 import com.example.mad_exercise1_composable.widgets.HomeAppBar
 import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.mad_exercise1_composable.viewModels.MoviesViewModel
@@ -27,6 +28,7 @@ fun HomeScreen(navController: NavController){
 
     val viewModel: MoviesViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(
         LocalContext.current))
+
     val coroutineScope = rememberCoroutineScope()
     val movieListState by viewModel.movieList.collectAsState()
 
@@ -85,7 +87,8 @@ fun HomeScreen(navController: NavController){
             items(movieListState) { movie ->
                 MovieRow(
                     movie = movie,
-                    onItemClick = {movieId -> navController.navigate(Screens.DetailScreen.route + "/${movieId}") },
+                    onItemClick = {
+                            movieId -> navController.navigate(Screens.DetailScreen.route + "/${movieId}") },
                     onFavClick = { coroutineScope.launch { viewModel.toggleFavorite(it) }})
                 Modifier.padding(vertical = 10.dp)
             }

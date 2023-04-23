@@ -1,6 +1,7 @@
 package com.example.mad_exercise1_composable.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -21,24 +22,38 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.mad_exercise1_composable.models.Movie
+import com.example.mad_exercise1_composable.models.getMovies
 import com.example.mad_exercise1_composable.navigation.Screens
 import com.example.mad_exercise1_composable.utils.InjectorUtils
 import com.example.mad_exercise1_composable.widgets.MovieRow
 import com.example.mad_exercise1_composable.widgets.SimpleAppBar
 import com.example.mad_exercise1_composable.viewModels.DetailsViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.flow
+import okhttp3.internal.wait
+import java.lang.Thread.sleep
+import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun DetailScreen(navController: NavController, movieId: Int){
 
+    Log.i("DetailScreen", movieId.toString())
     val viewModel: DetailsViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(
         LocalContext.current)
     )
 
     val coroutineScope = rememberCoroutineScope()
-    viewModel.getMovieByID(movieId)
+
+    //viewModel.getMovieByID(movieId)
+
     val movie by viewModel.movieList.collectAsState()
+
+    //Thread.sleep(2500)
 
     Column {
         SimpleAppBar(arrowBackClicked = {navController.navigateUp()}){
